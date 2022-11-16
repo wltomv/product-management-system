@@ -1,5 +1,7 @@
-import { newUser, login } from '../services/auth.service.js'
+import { pool } from '../config/db.js';
+import { newUser, login, emailExists } from '../services/auth.service.js'
 import { handleHttp } from '../utils/error.handle.js'
+import { sendMail } from '../utils/mail.js';
 
 const registerCtrl = async (req, res) => {
     try {
@@ -27,4 +29,18 @@ const loginCtrl = async ({ body }, res) => {
     }
 };
 
-export { loginCtrl, registerCtrl }
+
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    const mailStatus = await emailExists(email)
+
+    if (mailStatus) {
+        const mailResolution = await sendMail('Password by Product management system', 'to reset your password click on the following link', email)
+        if (!mailResolution) return res.status(400).json({ status: false, message: 'error sending mail, try again later' })
+        else return res.json({ status: true, message: "Email sent" })
+    } else {
+        return res.status(404).json({ status: false, message: 'Incorrect mail, not registered' })
+    }
+}
+
+export { loginCtrl, registerCtrl, forgotPassword }

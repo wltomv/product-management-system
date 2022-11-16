@@ -25,5 +25,11 @@ const login = async (user) => {
 
 }
 
-
-export { newUser, login }
+const emailExists = async (email) => {
+    const query = "SELECT email, password from user where email =?;"
+    const [rows] = await pool.query(query, [email])
+    console.log(rows);
+    if (rows.length <= 0) return false
+    return true
+}
+export { newUser, login, emailExists }
