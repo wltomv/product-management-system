@@ -9,3 +9,8 @@ create table user(
     UNIQUE (email)
 );
 
+create table Category(
+    id int NOT NULL AUTO_INCREMENT,
+    category varchar(255) NOT NULL,
+    primary key(id)
+);
