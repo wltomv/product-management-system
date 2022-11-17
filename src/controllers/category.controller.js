@@ -1,5 +1,6 @@
 import { getCategoriesDB, newCategory, updateCategoryDB } from '../services/category.service.js'
 import { handleHttp } from '../utils/error.handle.js'
+
 const getCategories = async (req, res) => {
     try {
         const { id } = req.params
@@ -30,7 +31,7 @@ const updateCategory = async (req, res) => {
 
         res.json({ status: true, message: 'Category updated', category });
     } catch (error) {
-        return handleHttp(res, "ERROR UPDATE USER", error)
+        return handleHttp(res, "ERROR UPDATE CATEGORY", error)
     }
 }
 
