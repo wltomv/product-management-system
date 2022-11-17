@@ -1,5 +1,6 @@
-import { pool } from '../config/db.js';
-import { newUser, login, emailExists } from '../services/auth.service.js'
+
+import { newUser, login, emailExists, validateOldPassword, updatePassword } from '../services/auth.service.js'
+import { generateToken, verifyToken } from '../utils/jwt.handle.js';
 import { handleHttp } from '../utils/error.handle.js'
 import { sendMail } from '../utils/mail.js';
 
@@ -25,11 +26,13 @@ const loginCtrl = async ({ body }, res) => {
         res.send(responseUser)
     }
     else {
-        res.status(200).send(responseUser)
+        const { email, role } = responseUser.user
+        const token = await generateToken({ email, role })
+        res.status(200).send({ status: true, token })
     }
 };
 
-
+//TODO 
 const forgotPassword = async (req, res) => {
     const { email } = req.body;
     const mailStatus = await emailExists(email)
@@ -43,4 +46,26 @@ const forgotPassword = async (req, res) => {
     }
 }
 
-export { loginCtrl, registerCtrl, forgotPassword }
+const changePassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const token = req.headers.authorization.split(' ').pop()
+    const payload = await verifyToken(token)
+
+    const usersFound = await validateOldPassword(payload.email, oldPassword)
+
+    if (usersFound.length <= 0) {
+        return res.status(400).json({ message: 'incorrect old password' });
+    }
+    else if (usersFound[0].password === oldPassword) {
+        const result = await updatePassword(payload.email, newPassword)
+
+        if (result.affectedRows > 0) {
+            return res.status(200).json({ message: "password updated successfully." })
+        }
+        else {
+            return res.status(500).json({ msg: "Something went wrong. Please try again later" });
+        }
+    }
+}
+
+export { loginCtrl, registerCtrl, forgotPassword, changePassword }
