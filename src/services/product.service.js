@@ -38,10 +38,26 @@ const updateProductDB = async (product) => {
     const [result] = await pool.query(query, [product.name, product.categoryId, product.description, product.price, product.id])
     return result
 }
+
+const updateProductStatusDB = async (product) => {
+    const query = "update product set status=? where id=?;"
+    const [result] = await pool.query(query, [product.status, product.id])
+    return result
+}
+
+
 const deleteProductDB = async (id) => {
     const query = "DELETE FROM product  where id=?;"
     const [result] = await pool.query(query, [id])
     return result
 }
 
-export { getProductsDB, getProductsByIdDB, getProductsByCategoryDB, newProduct, updateProductDB, deleteProductDB }
+export {
+    getProductsDB,
+    getProductsByIdDB,
+    getProductsByCategoryDB,
+    newProduct,
+    updateProductDB,
+    updateProductStatusDB,
+    deleteProductDB
+}

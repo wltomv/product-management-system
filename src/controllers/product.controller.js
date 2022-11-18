@@ -1,4 +1,4 @@
-import { getProductsDB, getProductsByCategoryDB, getProductsByIdDB, newProduct, updateProductDB, deleteProductDB } from '../services/product.service.js'
+import { getProductsDB, getProductsByCategoryDB, getProductsByIdDB, newProduct, updateProductDB, updateProductStatusDB, deleteProductDB } from '../services/product.service.js'
 import { handleHttp } from '../utils/error.handle.js'
 
 const getProducts = async (req, res) => {
@@ -56,6 +56,21 @@ const updateProduct = async (req, res) => {
     }
 }
 
+const updateProductStatus = async (req, res) => {
+    try {
+        let product = req.body;
+        const result = await updateProductStatusDB(product);
+
+        if (result.affectedRows === 0)
+            return res.status(404).json({ status: false, message: "Product not found" });
+
+        res.json({ status: true, message: "Product status updated" });
+    } catch (error) {
+        return handleHttp(res, "ERROR UPDATE PRODUCT", error)
+    }
+}
+
+
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params
@@ -72,4 +87,4 @@ const deleteProduct = async (req, res) => {
 
 
 
-export { getProducts, registerProduct, updateProduct, getProductsByCategory, getProductsById, deleteProduct }
+export { getProducts, registerProduct, updateProduct, updateProductStatus, getProductsByCategory, getProductsById, deleteProduct }
