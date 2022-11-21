@@ -68,4 +68,8 @@ const changePassword = async (req, res) => {
     }
 }
 
-export { loginCtrl, registerCtrl, forgotPassword, changePassword }
+const checkToken = (req, res) => {
+    return res.status(200).json({ status: true })
+}
+
+export { loginCtrl, registerCtrl, forgotPassword, changePassword, checkToken }
