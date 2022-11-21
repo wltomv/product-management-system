@@ -5,7 +5,7 @@ import { checkJWT } from "../middlewares/session.js";
 const router = Router();
 
 router.post('/signup', registerCtrl);
-router.get('/login', loginCtrl);
+router.post('/login', loginCtrl);
 router.get('/forgotpassword', forgotPassword);
 router.patch('/changePassword', checkJWT, changePassword)
 
