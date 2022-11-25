@@ -13,7 +13,7 @@ const getProductsDB = async () => {
 }
 
 const getProductsByCategoryDB = async (id) => {
-    const [rows] = await pool.query('SELECT id, product FROM product WHERE categoryId=? and status = 1;', [id])
+    const [rows] = await pool.query('SELECT id, product FROM product WHERE categoryId=? and status = 1 order by product asc;', [id])
     return rows
 }
 const getProductsByIdDB = async (id) => {
