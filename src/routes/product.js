@@ -13,7 +13,7 @@ router.get('/category/:id', checkJWT, checkRoleAuth([ADMIN_ROLE]), getProductsBy
 router.get('/:id', checkJWT, checkRoleAuth([ADMIN_ROLE]), getProductsById);
 router.post('/', checkJWT, checkRoleAuth([ADMIN_ROLE]), registerProduct);
 router.put('/update', checkJWT, checkRoleAuth([ADMIN_ROLE]), updateProduct);
-router.patch('/:id', checkJWT, checkRoleAuth([ADMIN_ROLE]), updateProductStatus);
+router.patch('/updateStatus', checkJWT, checkRoleAuth([ADMIN_ROLE]), updateProductStatus);
 router.delete('/:id', checkJWT, checkRoleAuth([ADMIN_ROLE]), deleteProduct);
 
 export { router }; 
